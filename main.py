@@ -20,12 +20,17 @@ def main () :
     dt = 0.0
     
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+
     
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+                
+        dt = clock.tick (60) / 1000.0  # Delta time in seconds 
+        
+        player.update(dt) 
                 
         log_state()
                 
@@ -35,7 +40,7 @@ def main () :
         
         pygame.display.flip() 
         
-        dt = clock.tick (60) / 1000.0  # Delta time in seconds 
+
         
         
                 
