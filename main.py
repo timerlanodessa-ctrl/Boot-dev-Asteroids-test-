@@ -1,10 +1,13 @@
 import pygame
 from asteroid import Asteroid
 from constants import *
-from logger import log_state
+from logger import log_event, log_state
 from player import Player
 from constants import *
 from asteroidfield import AsteroidField
+import sys
+from logger import log_state
+from shot import Shot
 
 
 
@@ -31,6 +34,12 @@ def main () :
        
     AsteroidField.containers = (updatable,)
     asteroid_field = AsteroidField()
+    
+    shots = pygame.sprite.Group()
+    Shot.containers = (shots, updatable, drawable)
+    
+        
+           
 
     
     
@@ -50,7 +59,20 @@ def main () :
                 exit()
                 
         updatable.update(dt)
+        
+        for asteroid in asteroids:
+            if asteroid.collides_with(player):
+                log_event("player_hit")
+                print("Game Over!")
+                sys.exit()
                 
+        for shot in shots:       
+            for asteroid in asteroids:
+                if asteroid.collides_with(shot):
+                    log_event("asteroid_shot")
+                    asteroid.split()
+                    shot.kill()
+             
                 
         log_state()
                 
@@ -63,6 +85,8 @@ def main () :
         pygame.display.flip()
         
         dt = clock.tick (60) / 1000.0  # Delta time in seconds 
+        
+        
         
 
         
