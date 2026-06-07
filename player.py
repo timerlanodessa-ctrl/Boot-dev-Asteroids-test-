@@ -1,6 +1,11 @@
 import pygame
 from circleshape import CircleShape
-from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED
+from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED
+
+
+
+
+
 
 
 class Player(CircleShape):
@@ -27,7 +32,20 @@ class Player(CircleShape):
     def update(self, dt: float) -> None:
         keys = pygame.key.get_pressed()
 
+
         if keys[pygame.K_a]:
-            self.rotate(-dt)
+           self.rotate(-dt)
         if keys[pygame.K_d]:
-            self.rotate(dt)
+           self.rotate(dt)
+        if keys[pygame.K_w]:
+            self.move(dt)
+        if keys[pygame.K_s]:
+            self.move(-dt) # Отрицательное время заставит вектор тянуть назад
+
+    def move(self, dt):
+        unit_vector = pygame.Vector2(0, 1)
+        rotated_vector = unit_vector.rotate(self.rotation)
+        # 1. Создаем финальный вектор движения
+        movement = rotated_vector * PLAYER_SPEED * dt
+        # 2. Прибавляем его к позиции
+        self.position += movement
